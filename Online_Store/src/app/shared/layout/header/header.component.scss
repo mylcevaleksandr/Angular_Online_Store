@@ -1,5 +1,144 @@
-p{
-  background-color: coral;
-  font-family: Montserrat;
-  font-weight: 700;
+@import "../../../../assets/styles/variables.scss";
+
+.header {
+  padding: 30px 0 49px 0;
+}
+
+.logo img {
+  width: 148px;
+  height: 137px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+
+  .header-top {
+    padding-top: 32px;
+    padding-bottom: 25px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #C5C5C5;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+
+    .header-top-menu {
+      margin-left: 26px;
+      margin-right: 231px;
+
+      nav ul {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        column-gap: 40px;
+
+        li {
+          border-bottom: 1px solid transparent;
+
+          &.active {
+            border-bottom-color: $base-text-color;
+          }
+
+          a {
+            color: $base-text-color;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    .header-top-phone {
+      color: $base-text-color;
+      font-size: 16px;
+      font-style: normal;
+      margin-right: 59px;
+    }
+
+    .header-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 18px;
+
+      a {
+        position: relative;
+
+        span {
+          position: absolute;
+          width: 18px;
+          height: 18px;
+          top: 10px;
+          right: -18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $base-text-color;
+          font-family: Montserrat;
+          font-size: 9px;
+          font-style: normal;
+          font-weight: 400;
+          border-radius: 50%;
+          background-color: #B6D5B9;
+        }
+      }
+    }
+  }
+
+  .header-bottom {
+    padding-top: 16px;
+    display: flex;
+    align-items: center;
+
+    .header-bottom-menu {
+      margin-left: 26px;
+      margin-right: 147px;
+
+      nav ul {
+        display: flex;
+        column-gap: 50px;
+
+        li {
+          border-bottom: 1px solid transparent;
+
+          &.active {
+            border-bottom-color: $base-text-color;
+          }
+
+          a {
+            color: $base-text-color;
+            font-size: 16px;
+          }
+        }
+
+
+      }
+    }
+
+    .header-bottom-search {
+      position: relative;
+
+      input {
+        display: flex;
+        padding: 10px 10px 10px 43px;
+        border-radius: 30px;
+        border: 1px solid $base-text-color;
+        width: 214px;
+        height: 41px;
+        box-sizing: border-box;
+        outline: none;
+      }
+
+      &::after {
+        content: "";
+        background-image: url("../../../../assets/images/icons/search.png");
+        background-size: cover;
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        left: 15px;
+        top: 11px
+      }
+    }
+  }
 }

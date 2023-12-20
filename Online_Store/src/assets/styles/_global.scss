@@ -1,0 +1,25 @@
+//@import "variables";
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #FFF;
+  font-family: 'Montserrat', sans-serif;
+  color: $base-text-color;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+ul, li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.container {
+  max-width: $container-width;
+  margin: 0 auto;
+}
