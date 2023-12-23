@@ -4,11 +4,6 @@
   padding: 30px 0 49px 0;
 }
 
-.logo img {
-  width: 148px;
-  height: 137px;
-}
-
 .container {
   display: flex;
   justify-content: space-between;
@@ -37,11 +32,11 @@
           border-bottom: 1px solid transparent;
 
           &.active {
-            border-bottom-color: $base-text-color;
+            border-bottom-color: $green-text-color;
           }
 
           a {
-            color: $base-text-color;
+            color: $green-text-color;
             font-size: 16px;
           }
         }
@@ -49,7 +44,7 @@
     }
 
     .header-top-phone {
-      color: $base-text-color;
+      color: $green-text-color;
       font-size: 16px;
       font-style: normal;
       margin-right: 59px;
@@ -73,7 +68,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          color: $base-text-color;
+          color: $green-text-color;
           font-family: Montserrat;
           font-size: 9px;
           font-style: normal;
@@ -102,11 +97,11 @@
           border-bottom: 1px solid transparent;
 
           &.active {
-            border-bottom-color: $base-text-color;
+            border-bottom-color: $green-text-color;
           }
 
           a {
-            color: $base-text-color;
+            color: $green-text-color;
             font-size: 16px;
           }
         }
@@ -122,11 +117,13 @@
         display: flex;
         padding: 10px 10px 10px 43px;
         border-radius: 30px;
-        border: 1px solid $base-text-color;
+        border: 1px solid $green-text-color;
         width: 214px;
         height: 41px;
         box-sizing: border-box;
         outline: none;
+        font-size: inherit;
+        font-family: inherit;
       }
 
       &::after {
@@ -137,7 +134,7 @@
         width: 16px;
         height: 16px;
         left: 15px;
-        top: 11px
+        top: 12px
       }
     }
   }

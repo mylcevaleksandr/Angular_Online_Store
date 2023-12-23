@@ -1,10 +1,11 @@
-//@import "variables";
+@import "variables";
+
 html, body {
   margin: 0;
   padding: 0;
   background-color: #FFF;
   font-family: 'Montserrat', sans-serif;
-  color: $base-text-color;
+  color: $green-text-color;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -22,4 +23,9 @@ a {
 .container {
   max-width: $container-width;
   margin: 0 auto;
+}
+
+.logo img {
+  width: 148px;
+  height: 137px;
 }
