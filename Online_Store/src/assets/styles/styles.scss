@@ -36,12 +36,3 @@ $Online_Store-theme: mat.define-light-theme((
 @import "variables";
 @import "fonts";
 @import "global";
-
-
-* {
-  margin: 0;
-  padding: 0;
-}
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

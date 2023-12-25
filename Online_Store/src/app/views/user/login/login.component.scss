@@ -1,0 +1,12 @@
+//@import "../../../../assets/styles/variables.scss";
+@import "../../../../assets/styles/auth-form.scss";
+
+.login .container {
+  display: flex;
+  .page-image {
+    margin-left: 56px;
+    img {
+      vertical-align: bottom;
+    }
+  }
+}

@@ -14,8 +14,6 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid #C5C5C5;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
     font-weight: 500;
 
     .header-top-menu {
@@ -23,8 +21,6 @@
       margin-right: 231px;
 
       nav ul {
-        margin: 0;
-        padding: 0;
         display: flex;
         column-gap: 40px;
 
@@ -34,19 +30,11 @@
           &.active {
             border-bottom-color: $green-text-color;
           }
-
-          a {
-            color: $green-text-color;
-            font-size: 16px;
-          }
         }
       }
     }
 
     .header-top-phone {
-      color: $green-text-color;
-      font-size: 16px;
-      font-style: normal;
       margin-right: 59px;
     }
 
@@ -68,10 +56,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          color: $green-text-color;
-          font-family: Montserrat;
           font-size: 9px;
-          font-style: normal;
           font-weight: 400;
           border-radius: 50%;
           background-color: #B6D5B9;
@@ -99,21 +84,19 @@
           &.active {
             border-bottom-color: $green-text-color;
           }
-
-          a {
-            color: $green-text-color;
-            font-size: 16px;
-          }
         }
-
-
       }
     }
 
     .header-bottom-search {
       position: relative;
 
-      input {
+      .header-search-input {
+        font-family: 'Montserrat', sans-serif;
+        color: $green-text-color;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
         display: flex;
         padding: 10px 10px 10px 43px;
         border-radius: 30px;
@@ -121,9 +104,6 @@
         width: 214px;
         height: 41px;
         box-sizing: border-box;
-        outline: none;
-        font-size: inherit;
-        font-family: inherit;
       }
 
       &::after {

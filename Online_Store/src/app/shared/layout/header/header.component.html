@@ -1,6 +1,6 @@
 <header class="header">
   <div class="container">
-    <a class="logo">
+    <a class="logo" routerLink="/">
       <img src="/assets/images/logo.png" alt="Logo">
     </a>
     <div class="header-content">
@@ -9,7 +9,7 @@
           <nav>
             <ul>
               <li>
-                <a>Главная</a>
+                <a routerLink="/">Главная</a>
               </li>
               <li>
                 <a>Каталог</a>
@@ -27,7 +27,7 @@
           + 375 (29) 918-28-88
         </a>
         <div class="header-top-actions">
-          <a>
+          <a routerLink="/login">
             <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M8.5293 7.24498C8.82638 3.79498 10.5993 2.38623 14.4805 2.38623H14.6051C18.8889 2.38623 20.6043 4.10165 20.6043 8.3854V14.6337C20.6043 18.9175 18.8889 20.6329 14.6051 20.6329H14.4805C10.628 20.6329 8.85513 19.2433 8.53888 15.8508"
@@ -82,7 +82,7 @@
           </nav>
         </div>
         <div class="header-bottom-search">
-          <input type="text" placeholder="Начните искать">
+          <input class="header-search-input" type="text" placeholder="Начните искать">
         </div>
       </div>
 

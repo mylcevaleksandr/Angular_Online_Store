@@ -1,0 +1,16 @@
+//@import "../../../../assets/styles/variables.scss";
+@import "../../../../assets/styles/auth-form.scss";
+
+.signup {
+
+  .container {
+    display: flex;
+   .page-image {
+      margin-top: 10px;
+     margin-left: 222px;
+      img {
+        vertical-align: bottom;
+      }
+    }
+  }
+}
