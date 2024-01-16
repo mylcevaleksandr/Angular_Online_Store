@@ -69,3 +69,13 @@ ul, li {
     cursor: not-allowed;
   }
 }
+
+.mat-mdc-menu-item {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+
+  a, span {
+    color: $gray-text-color;
+  }
+}

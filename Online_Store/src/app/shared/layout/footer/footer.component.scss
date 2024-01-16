@@ -83,11 +83,13 @@
             height: 35px;
             background-position: top;
             border-radius: 3px;
-            @include mat.elevation-transition();
+            //@include mat.elevation-transition(1000ms);
             @include mat.elevation(5, #43f849);
+            transition: 500ms ease-in-out;
 
             &:hover {
               @include mat.elevation(20, #43f849);
+              transform: scale(110%);
             }
           }
         }
