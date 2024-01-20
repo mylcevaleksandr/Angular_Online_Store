@@ -15,4 +15,8 @@ export class ProductService {
   getBestProducts(): Observable<ProductType[]> {
     return this.http.get<ProductType[]>(environment.apiUrl + "products/best")
   }
+
+  getProducts(): Observable<{totalCount: number, pages: number, items: ProductType[]}> {
+    return this.http.get<{totalCount: number, pages: number, items: ProductType[]}>(environment.apiUrl + "products")
+  }
 }
