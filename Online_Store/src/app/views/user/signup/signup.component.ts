@@ -5,7 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {LoginResponseType} from "../../../../types/login-response.type";
 import {HttpErrorResponse} from "@angular/common/http";
-import {SubscriberService} from "../../../shared/services/subscriber.service";
+import {RepeatedCodeService} from "../../../shared/services/repeatedCode.service";
 
 @Component({
   selector: 'app-signup',
@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit {
     rememberMe: [false, [Validators.requiredTrue]]
   })
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private subscriberService: SubscriberService, private _snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private subscriberService: RepeatedCodeService, private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class SignupComponent implements OnInit {
       this.authService.signup(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.passwordRepeat)
         .subscribe({
           next: (data: DefaultResponseType | LoginResponseType) => {
-            this.subscriberService.perform(data, 'signup')
+            this.subscriberService.performOperation(data, 'signup')
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.message) {

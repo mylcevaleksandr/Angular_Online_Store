@@ -5,7 +5,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {LoginResponseType} from "../../../../types/login-response.type";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {SubscriberService} from "../../../shared/services/subscriber.service";
+import {RepeatedCodeService} from "../../../shared/services/repeatedCode.service";
 
 @Component({
   selector: 'app-login',
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     rememberMe: [false]
   })
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private subscriberService: SubscriberService, private _snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private subscriberService: RepeatedCodeService, private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.loginForm.value.email, this.loginForm.value.password, !!this.loginForm.value.rememberMe)
         .subscribe({
           next: (data: DefaultResponseType | LoginResponseType) => {
-            this.subscriberService.perform(data, 'login')
+            this.subscriberService.performOperation(data, 'login')
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.message) {
