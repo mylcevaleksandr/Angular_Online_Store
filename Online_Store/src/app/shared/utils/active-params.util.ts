@@ -5,10 +5,11 @@ import {SizeVariablesUtil} from "./sizeVariables.util";
 export class ActiveParamsUtil {
 
   static processParams(params: Params): ActiveParamsType {
-    console.log();
     const activeParams: ActiveParamsType = {types: []};
-    if (params.hasOwnProperty('types')) {
+    if (params.hasOwnProperty('types') && params['types'] !== undefined) {
       activeParams.types = Array.isArray(params['types']) ? params['types'] : [params['types']];
+    } else {
+      activeParams.types = [];
     }
     if (params.hasOwnProperty(SizeVariablesUtil.heightFrom)) {
       activeParams.heightFrom = params[SizeVariablesUtil.heightFrom];
@@ -29,6 +30,5 @@ export class ActiveParamsUtil {
       activeParams.page = +params['page'];
     }
     return activeParams;
-
   }
 }
