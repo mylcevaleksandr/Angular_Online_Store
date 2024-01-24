@@ -18,14 +18,13 @@ export class CategoryFilterComponent implements OnInit {
   public from: number | null = null;
   public to: number | null = null;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
-
     this.activatedRoute.queryParams.subscribe(params => {
       this.activeParams = ActiveParamsUtil.processParams(params);
-
       if (this.type) {
         if (this.type === 'height') {
           this.open = !!(this.activeParams.heightFrom || this.activeParams.heightTo);
@@ -47,7 +46,6 @@ export class CategoryFilterComponent implements OnInit {
         }
       }
     });
-
   }
 
   public get title(): string {
@@ -64,11 +62,7 @@ export class CategoryFilterComponent implements OnInit {
   }
 
   public toggle(): void {
-    if (!this.open) {
-      this.open = true;
-    } else {
-      this.open = false;
-    }
+    this.open = !this.open;
   }
 
   public updateFilterParam(url: string, checked: boolean) {
@@ -95,7 +89,6 @@ export class CategoryFilterComponent implements OnInit {
         Object.assign(this.activeParams, {[param as keyof ActiveParamsType]: value});
       }
     }
-
     this.router.navigate(['/catalog'], {
       queryParams: this.activeParams
     });
