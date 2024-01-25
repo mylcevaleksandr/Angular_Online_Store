@@ -1,6 +1,6 @@
 <section class="catalog">
   <div class="container">
-    <div class="catalog-title">Каталог</div>
+    <div class="catalog-title" id="point">Каталог</div>
     <div class="catalog-head">
       <div class="catalog-applied-filters">
         <div class="catalog-applied-filter" *ngFor="let appliedFilter of appliedFilters">
@@ -13,20 +13,28 @@
           </a>
         </div>
       </div>
-      <div class="catalog-sorting open">
+      <div class="catalog-sorting" [class.open]="sortingOpen" (click)="toggleSorting()">
         <div class="catalog-sorting-head">
           <span>Сортировать</span>
-          <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+               *ngIf="!sortingOpen">
             <path
               d="M10.0003 14.5C9.41693 14.5 8.83359 14.275 8.39193 13.8334L2.95859 8.40003C2.71693 8.15837 2.71693 7.75837 2.95859 7.5167C3.20026 7.27503 3.60026 7.27503 3.84193 7.5167L9.27526 12.95C9.67526 13.35 10.3253 13.35 10.7253 12.95L16.1586 7.5167C16.4003 7.27503 16.8003 7.27503 17.0419 7.5167C17.2836 7.75837 17.2836 8.15837 17.0419 8.40003L11.6086 13.8334C11.1669 14.275 10.5836 14.5 10.0003 14.5Z"
               fill="#2C2C2C"/>
           </svg>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+               *ngIf="sortingOpen">
+            <path
+              d="M9.99974 5.99997C10.5831 5.99997 11.1664 6.22497 11.6081 6.66663L17.0414 12.1C17.2831 12.3416 17.2831 12.7416 17.0414 12.9833C16.7997 13.225 16.3997 13.225 16.1581 12.9833L10.7247 7.54997C10.3247 7.14997 9.67474 7.14997 9.27474 7.54997L3.84141 12.9833C3.59974 13.225 3.19974 13.225 2.95807 12.9833C2.71641 12.7416 2.71641 12.3416 2.95807 12.1L8.39141 6.66663C8.83307 6.22497 9.41641 5.99997 9.99974 5.99997Z"
+              fill="#292D32"/>
+          </svg>
+
         </div>
         <div class="catalog-sorting-body">
-          <div class="catalog-sorting-item">От А до Я</div>
-          <div class="catalog-sorting-item">От Я до А</div>
-          <div class="catalog-sorting-item active">По возрастанию цены</div>
-          <div class="catalog-sorting-item">По убыванию цены</div>
+          <div class="catalog-sorting-item"
+               (click)="sort(sortingOption.value)"
+               [class.active]="this.activeParams.sort? this.activeParams.sort===sortingOption.value:false"
+               *ngFor="let sortingOption of sortingOptions">{{sortingOption.name}}</div>
         </div>
       </div>
     </div>
@@ -41,8 +49,10 @@
         <product-card *ngFor="let product of products" [product]="product"></product-card>
       </div>
     </div>
-    <div class="pagination">
-      <div class="pagination-arrow">
+    <div class="pagination" *ngIf="pages.length>1">
+      <div class="pagination-arrow"
+           (click)="openPrevPage()"
+           [class.disabled]="activeParams.page?activeParams.page===1:true">
         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M9.56988 5.98092C9.75988 5.98092 9.94988 6.04973 10.0999 6.19717C10.3899 6.48223 10.3899 6.95405 10.0999 7.2391L4.55988 12.6847L10.0999 18.1303C10.3899 18.4153 10.3899 18.8871 10.0999 19.1722C9.80988 19.4573 9.32988 19.4573 9.03988 19.1722L2.96988 13.2056C2.67988 12.9206 2.67988 12.4488 2.96988 12.1637L9.03988 6.19717C9.18988 6.04973 9.37988 5.98092 9.56988 5.98092Z"
@@ -53,13 +63,15 @@
         </svg>
       </div>
       <div class="pagination-pages">
-        <a class="pagination-page active">1</a>
-        <a class="pagination-page">2</a>
-        <a class="pagination-page">3</a>
-        <a class="pagination-page">4</a>
-        <a class="pagination-page">5</a>
+        <a class="pagination-page"
+           [class.active]="this.activeParams.page? this.activeParams.page===page:(page===1)"
+           *ngFor="let page of pages"
+           (click)="openPage(page)"
+        >{{page}}</a>
       </div>
-      <div class="pagination-arrow">
+      <div class="pagination-arrow"
+           (click)="openNextPage()"
+           [class.disabled]="activeParams.page?activeParams.page===pages.length:false">
         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M14.4301 19.3885C14.2401 19.3885 14.0501 19.3197 13.9001 19.1722C13.6101 18.8872 13.6101 18.4153 13.9001 18.1303L19.4401 12.6847L13.9001 7.23913C13.6101 6.95407 13.6101 6.48225 13.9001 6.19719C14.1901 5.91213 14.6701 5.91213 14.9601 6.19719L21.0301 12.1637C21.3201 12.4488 21.3201 12.9206 21.0301 13.2057L14.9601 19.1722C14.8101 19.3197 14.6201 19.3885 14.4301 19.3885Z"

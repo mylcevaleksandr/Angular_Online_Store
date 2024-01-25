@@ -19,6 +19,14 @@ export class CatalogComponent implements OnInit {
   public categoriesWithTypes: CategoryWithTypeType[] = [];
   public activeParams: ActiveParamsType = {types: []};
   public appliedFilters: AppliedFilterType[] = [];
+  public sortingOpen: boolean = false;
+  public sortingOptions: { name: string, value: string }[] = [
+    {name: 'От А до Я', value: 'az-asc'},
+    {name: 'От Я до А', value: 'az-desc'},
+    {name: 'По возрастанию цены', value: 'price-asc'},
+    {name: 'По убыванию цены', value: 'price-desc'},
+  ];
+  public pages: number[] = [];
 
 
   constructor(private productService: ProductService,
@@ -68,10 +76,15 @@ export class CatalogComponent implements OnInit {
             urlParam: SizeVariablesUtil.diameterTo
           });
         }
+        this.productService.getProducts(this.activeParams).subscribe(data => {
+          this.pages = [];
+          for (let i = 1; i <= data.pages; i++) {
+            this.pages.push(i);
+          }
+          this.products = data.items;
+          document.getElementById("point")?.scrollIntoView({behavior: "smooth"});
+        });
       });
-    });
-    this.productService.getProducts().subscribe(data => {
-      this.products = data.items;
     });
   }
 
@@ -81,9 +94,41 @@ export class CatalogComponent implements OnInit {
     } else {
       this.activeParams.types = this.activeParams.types.filter(item => item !== appliedFilter.urlParam);
     }
+    this.activeParams.page = 1;
+    this.navigate();
+  }
+
+  public toggleSorting(): void {
+    this.sortingOpen = !this.sortingOpen;
+  }
+
+  public sort(value: string): void {
+    this.activeParams.sort = value;
+    this.navigate();
+  }
+
+  public openPage(page: number): void {
+    this.activeParams.page = page;
+    this.navigate();
+  }
+
+  public openPrevPage(): void {
+    if (this.activeParams.page && this.activeParams.page > 1) {
+      this.activeParams.page--;
+      this.navigate();
+    }
+  }
+
+  public openNextPage(): void {
+    if (this.activeParams.page && this.activeParams.page < this.pages.length) {
+      this.activeParams.page++;
+      this.navigate();
+    }
+  }
+
+  private navigate(): void {
     this.router.navigate(['/catalog'], {
       queryParams: this.activeParams
     });
   }
-
 }
