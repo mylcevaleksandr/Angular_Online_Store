@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CategoryType} from "../../../../types/category.type";
 import {AuthService} from "../../../core/auth/auth.service";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {CategoryWithTypeType} from "../../../../types/category-with-type.type";
 
 @Component({
   selector: 'app-header',
@@ -12,36 +12,36 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class HeaderComponent implements OnInit {
 
-  isLogged: boolean = false
-  @Input() categories: CategoryType[] = []
+  isLogged: boolean = false;
+  @Input() categories: CategoryWithTypeType[] = [];
 
   constructor(private authService: AuthService, private router: Router, private _snackBar: MatSnackBar) {
-    this.isLogged = this.authService.getIsLoggedIn()
+    this.isLogged = this.authService.getIsLoggedIn();
   }
 
   ngOnInit(): void {
     this.authService.isLogged$.subscribe((isLoggedIn: boolean): void => {
-      this.isLogged = isLoggedIn
-    })
+      this.isLogged = isLoggedIn;
+    });
   }
 
   logout(): void {
     this.authService.logout()
       .subscribe({
         next: () => {
-          this.doLogout()
+          this.doLogout();
         },
         error: (errorResponse: HttpErrorResponse) => {
-          this.doLogout()
+          this.doLogout();
         }
-      })
+      });
   }
 
   doLogout(): void {
-    this.authService.removeTokens()
-    this.authService.userId = null
-    this._snackBar.open('Вы вышли из системы')
-    this.router.navigate(['/'])
+    this.authService.removeTokens();
+    this.authService.userId = null;
+    this._snackBar.open('Вы вышли из системы');
+    this.router.navigate(['/']);
   }
 
 }
