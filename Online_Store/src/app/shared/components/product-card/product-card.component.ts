@@ -18,4 +18,7 @@ export class ProductCardComponent implements OnInit {
   ngOnInit(): void {
 
   }
+  updateCount(value:number){
+    console.log(value);
+  }
 }

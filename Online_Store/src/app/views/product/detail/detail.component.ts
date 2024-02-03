@@ -13,6 +13,7 @@ import {environment} from "../../../../environments/environment";
 export class DetailComponent implements OnInit {
   public products: ProductType[] = [];
   public product!: ProductType;
+  public count: number = 1;
   public serverStaticPath = environment.serverStaticPath;
 
   customOptions: OwlOptions = {
@@ -54,6 +55,13 @@ export class DetailComponent implements OnInit {
     this.productService.getBestProducts().subscribe((data: ProductType[]) => {
       this.products = data;
     });
+  }
 
+  updateCount(value: number): void {
+    this.count = value;
+  }
+
+  public addToCart(): void {
+    alert('added ' + this.count);
   }
 }

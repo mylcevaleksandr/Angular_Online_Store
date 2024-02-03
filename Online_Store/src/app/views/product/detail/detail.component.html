@@ -7,7 +7,7 @@
       <div class="detail-image" style="background-image: url({{serverStaticPath+product.image}})"></div>
       <div class="detail-info">
         <div class="detail-info-items">
-          <div class="detail-info-item" *ngIf="product.lightning" >
+          <div class="detail-info-item" *ngIf="product.lightning">
             <div class="detail-info-item-icon">
               <svg width="53" height="55" viewBox="0 0 53 55" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -94,7 +94,7 @@
         <div class="detail-info-params">
           <div class="detail-info-params-count">
             <span>Количество: </span>
-            <div class="">...</div>
+            <count-selector [count]="count" (onCountChange)="updateCount($event)"></count-selector>
           </div>
           <div class="detail-info-params-price">{{product.price}} BYN</div>
         </div>
@@ -107,7 +107,7 @@
             </svg>
             <span>В избранное</span>
           </button>
-          <button class="button">В корзину</button>
+          <button class="button" (click)="addToCart()">В корзину</button>
         </div>
       </div>
     </div>
