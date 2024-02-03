@@ -105,32 +105,6 @@
 .best-products {
   padding-top: 120px;
   padding-bottom: 130px;
-
-  .carousel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 50px;
-    //color: $green-text-color;
-
-    .carousel-title {
-      @include head-lora-32;
-    }
-
-    .carousel-arrows {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      a {
-        cursor: pointer;
-
-        &:first-child {
-          margin-right: 30px;
-        }
-      }
-    }
-  }
 }
 
 .info {

@@ -67,6 +67,10 @@ ul, li {
 }
 
 .button {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
   text-align: center;
   border-radius: 5px;
   background-color: #456F49;
@@ -74,6 +78,23 @@ ul, li {
   color: #FFF;
   box-sizing: border-box;
   cursor: pointer;
+
+  &.button-transparent {
+    color: $green-text-color;
+    background-color: transparent;
+    border-radius: 5px;
+    border: 1px solid #6CAC72;
+  }
+
+  &.button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      margin-left: 16px;
+    }
+  }
 
   &:disabled {
     background-color: $gray-text-color;
@@ -94,3 +115,30 @@ a.button {
     color: $gray-text-color;
   }
 }
+
+.carousel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 50px;
+  //color: $green-text-color;
+
+  .carousel-title {
+    @include head-lora-32;
+  }
+
+  .carousel-arrows {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a {
+      cursor: pointer;
+
+      &:first-child {
+        margin-right: 30px;
+      }
+    }
+  }
+}
+

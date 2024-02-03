@@ -1,0 +1,125 @@
+@import "../../../../assets/styles/variables";
+@import "../../../../assets/styles/mixins";
+
+.detail {
+  padding-top: 101px;
+  padding-bottom: 110px;
+
+  .container {
+    .detail-title {
+      @include head-lora-36;
+    }
+
+    .detail-product {
+      margin-top: 30px;
+      margin-bottom: 120px;
+      display: flex;
+      justify-content: space-between;
+
+      .detail-image {
+        width: 528px;
+        height: 528px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 10px;
+      }
+
+      .detail-info {
+        width: 602px;
+
+        .detail-info-items {
+          margin-bottom: 51px;
+
+          .detail-info-item {
+            display: flex;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #E7F1E8;
+
+            &:first-child {
+              padding-top: 0;
+              margin-top: 0;
+              border-top: 0;
+            }
+
+            .detail-info-item-text {
+              margin-left: 22px;
+              width: 528px;
+
+              .detail-info-item-title {
+                font-size: 20px;
+                font-weight: 500;
+                margin-bottom: 15px;
+              }
+
+              .detail-info-item-description {
+                color: $gray-text-color;
+                line-height: 130%;
+              }
+            }
+          }
+        }
+
+        .detail-info-param {
+          display: flex;
+          align-items: center;
+          margin-top: 12px;
+
+          &.mt-zero {
+            margin-top: 0;
+          }
+
+          .detail-info-param-name {
+            margin-right: 10px;
+            font-weight: 500;
+          }
+
+          .detail-info-param-data {
+            color: $gray-text-color;
+          }
+        }
+
+        .detail-info-params {
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          .detail-info-params-count {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            span {
+              font-weight: 500;
+            }
+          }
+
+          .detail-info-params-price {
+            font-weight: 700;
+            font-size: 40px;
+            color: #313131;
+          }
+        }
+
+        .detail-info-actions {
+          display: flex;
+          align-items: center;
+          margin-top: 22px;
+
+          .button {
+            width: 290px;
+            font-size: 18px;
+
+            &.button-transparent {
+              width: 307px;
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
