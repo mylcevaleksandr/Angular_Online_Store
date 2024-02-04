@@ -4,6 +4,17 @@
   box-sizing: border-box;
   position: relative;
 
+
+  &.cardLink {
+    cursor: pointer;
+    transition: all ease 300ms;
+    height: auto;
+
+    &:hover {
+      transform: scale(.95);
+    }
+  }
+
   .product-card-favorite {
     position: absolute;
     top: 12px;

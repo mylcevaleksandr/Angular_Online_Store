@@ -3,7 +3,7 @@ import {CategoryService} from "../services/category.service";
 import {CategoryWithTypeType} from "../../../types/category-with-type.type";
 
 @Component({
-  selector: 'app-layout',
+  selector: 'layout',
   templateUrl: './layout.component.html'
 })
 export class LayoutComponent implements OnInit {

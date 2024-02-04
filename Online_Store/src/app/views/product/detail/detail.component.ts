@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {OwlOptions} from "ngx-owl-carousel-o";
 import {ProductType} from "../../../../types/product.type";
 import {ProductService} from "../../../shared/services/product.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {environment} from "../../../../environments/environment";
 
 @Component({
-  selector: 'app-detail',
+  selector: 'detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
@@ -42,7 +42,7 @@ export class DetailComponent implements OnInit {
     nav: false
   };
 
-  constructor(private productService: ProductService, private activatedRoute: ActivatedRoute) {
+  constructor(private productService: ProductService, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -62,6 +62,6 @@ export class DetailComponent implements OnInit {
   }
 
   public addToCart(): void {
-    alert('added ' + this.count);
+    this.router.navigate(['/cart']);
   }
 }

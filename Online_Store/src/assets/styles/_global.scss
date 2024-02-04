@@ -54,7 +54,7 @@ ul, li {
 
 .small-input {
   border-radius: 5px;
-  border: 1px solid #6CAC72;
+  border: 1px solid $green-border-color;
   text-align: center;
   padding: 2px;
   box-sizing: border-box;
@@ -83,7 +83,8 @@ ul, li {
     color: $green-text-color;
     background-color: transparent;
     border-radius: 5px;
-    border: 1px solid #6CAC72;
+    border: 1px solid $green-border-color;
+    padding: 14px;
   }
 
   &.button-icon {
@@ -99,6 +100,28 @@ ul, li {
   &:disabled {
     background-color: $gray-text-color;
     cursor: not-allowed;
+  }
+
+  &.button-in-cart span {
+    &:first-child {
+      display: block;
+    }
+
+    &:last-child {
+      display: none;
+    }
+  }
+
+  &:hover {
+    &.button-in-cart span {
+      &:first-child {
+        display: none;
+      }
+
+      &:last-child {
+        display: block;
+      }
+    }
   }
 }
 

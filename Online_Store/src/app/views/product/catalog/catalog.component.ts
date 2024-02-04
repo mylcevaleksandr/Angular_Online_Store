@@ -128,6 +128,7 @@ export class CatalogComponent implements OnInit {
   }
 
   private navigate(): void {
+    console.log(this.activeParams);
     this.router.navigate(['/catalog'], {
       queryParams: this.activeParams
     });
