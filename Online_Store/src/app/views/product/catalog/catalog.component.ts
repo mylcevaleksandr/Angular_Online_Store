@@ -9,6 +9,8 @@ import {ActiveParamsUtil} from "../../../shared/utils/active-params.util";
 import {AppliedFilterType} from "../../../../types/applied-filter.type";
 import {SizeVariablesUtil} from "../../../shared/utils/sizeVariables.util";
 import {debounceTime} from "rxjs";
+import {CartService} from "../../../shared/services/cart.service";
+import {CartType} from "../../../../types/cart.type";
 
 @Component({
   selector: 'app-catalog',
@@ -28,15 +30,20 @@ export class CatalogComponent implements OnInit {
     {name: 'По убыванию цены', value: 'price-desc'},
   ];
   public pages: number[] = [];
+  public cart: CartType | null = null;
 
 
   constructor(private productService: ProductService,
               private categoryService: CategoryService,
               private activatedRoute: ActivatedRoute,
+              private cartService: CartService,
               private router: Router) {
   }
 
   ngOnInit(): void {
+    this.cartService.getCart().subscribe((data: CartType) => {
+      this.cart = data;
+    });
     this.categoryService.getCategoriesWithTypes().subscribe(data => {
       this.categoriesWithTypes = data;
       this.activatedRoute.queryParams.pipe(debounceTime(500)).subscribe(params => {
@@ -82,7 +89,17 @@ export class CatalogComponent implements OnInit {
           for (let i = 1; i <= data.pages; i++) {
             this.pages.push(i);
           }
-          this.products = data.items;
+          if (this.cart && this.cart.items.length > 0) {
+            this.products = data.items.map((product: ProductType) => {
+              const productInCart = this.cart?.items.find(item => item.product.id === product.id);
+              if (productInCart) {
+                product.countInCart = productInCart.quantity;
+              }
+              return product;
+            });
+          } else {
+            this.products = data.items;
+          }
           document.getElementById("point")?.scrollIntoView({behavior: "smooth"});
         });
       });
@@ -128,7 +145,6 @@ export class CatalogComponent implements OnInit {
   }
 
   private navigate(): void {
-    console.log(this.activeParams);
     this.router.navigate(['/catalog'], {
       queryParams: this.activeParams
     });
