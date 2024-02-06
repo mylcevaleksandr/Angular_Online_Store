@@ -66,8 +66,15 @@ export class CartComponent implements OnInit {
         this.totalAmount += item.quantity * item.product.price;
         this.totalCount += item.quantity;
       });
-
     }
   }
 
+  public updateCount(id: string, count: number) {
+    if (this.cart) {
+      this.cartService.updateCart(id, count).subscribe((data: CartType) => {
+        this.cart = data;
+        this.calculateTotal();
+      });
+    }
+  }
 }

@@ -107,8 +107,11 @@
             </svg>
             <span>В избранное</span>
           </button>
-          <button class="button" (click)="addToCart()">В корзину</button>
-        </div>
+          <button class="button" *ngIf="!product.countInCart" (click)="addToCart()">В корзину</button>
+          <button class="button button-transparent button-in-cart" *ngIf="product.countInCart" (click)="removeFromCart()">
+            <span>В корзине</span>
+            <span>Удалить</span>
+          </button>        </div>
       </div>
     </div>
     <section class="best-products">
