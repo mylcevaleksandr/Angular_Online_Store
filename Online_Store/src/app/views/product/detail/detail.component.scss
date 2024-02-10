@@ -117,6 +117,30 @@
               width: 307px;
               margin-right: 10px;
             }
+
+            div.favorite-added span {
+              //background-color: red;
+              &:first-child {
+                display: block;
+              }
+
+              &:last-child {
+                display: none;
+              }
+            }
+
+            &:hover {
+              div.favorite-added span {
+                //background-color: red;
+                &:first-child {
+                  display: none;
+                }
+
+                &:last-child {
+                  display: block;
+                }
+              }
+            }
           }
         }
       }

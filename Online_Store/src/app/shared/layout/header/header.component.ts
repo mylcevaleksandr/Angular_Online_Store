@@ -5,6 +5,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CategoryWithTypeType} from "../../../../types/category-with-type.type";
 import {CartService} from "../../services/cart.service";
+import {RepeatedCodeService} from "../../services/repeatedCode.service";
 
 @Component({
   selector: 'app-header',
@@ -19,18 +20,15 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService,
               private router: Router,
               private _snackBar: MatSnackBar,
-              private cartService: CartService) {
+              private cartService: CartService,
+              private repeatedCodeService: RepeatedCodeService) {
     this.isLogged = this.authService.getIsLoggedIn();
   }
 
   ngOnInit(): void {
+    this.repeatedCodeService.getCart();
     this.authService.isLogged$.subscribe((isLoggedIn: boolean): void => {
       this.isLogged = isLoggedIn;
-    });
-
-    this.cartService.getCartCount().subscribe((data) => {
-      this.count = data.count;
-      this.cartService.count = data.count;
     });
     this.cartService.count$.subscribe((count: number) => {
       this.count = count;
@@ -53,7 +51,8 @@ export class HeaderComponent implements OnInit {
     this.authService.removeTokens();
     this.authService.userId = null;
     this._snackBar.open('Вы вышли из системы');
-    this.router.navigate(['/']);
+    this.repeatedCodeService.getCart();
+    this.router.navigate(['']);
   }
 
 }

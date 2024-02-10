@@ -6,6 +6,12 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {environment} from "../../../../environments/environment";
 import {CartType} from "../../../../types/cart.type";
 import {CartService} from "../../../shared/services/cart.service";
+import {FavoriteService} from "../../../shared/services/favorite.service";
+import {DefaultResponseType} from "../../../../types/default-response.type";
+import {FavoriteType} from "../../../../types/favorite.type";
+import {AuthService} from "../../../core/auth/auth.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {RepeatedCodeService} from "../../../shared/services/repeatedCode.service";
 
 @Component({
   selector: 'detail',
@@ -47,22 +53,42 @@ export class DetailComponent implements OnInit {
   constructor(private productService: ProductService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private cartService: CartService) {
+              private cartService: CartService,
+              private favoriteService: FavoriteService,
+              private authService: AuthService,
+              private _snackBar: MatSnackBar,
+              private repeatedCodeService: RepeatedCodeService) {
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.productService.getProduct(params['url']).subscribe((data: ProductType) => {
-        this.cartService.getCart().subscribe((cartData: CartType) => {
+        this.product = data;
+        this.cartService.getCart().subscribe((cartData: CartType | DefaultResponseType) => {
+          if ((cartData as DefaultResponseType).error !== undefined) {
+            throw new Error((cartData as DefaultResponseType).message);
+          }
           if (cartData) {
-            const productInCart = cartData.items.find(item => item.product.id === data.id);
+            const productInCart = (cartData as CartType).items.find(item => item.product.id === this.product.id);
             if (productInCart) {
-              data.countInCart = productInCart.quantity;
-              this.count = data.countInCart;
+              this.product.countInCart = productInCart.quantity;
+              this.count = this.product.countInCart;
             }
           }
-          this.product = data;
         });
+        if (this.authService.getIsLoggedIn()) {
+          this.favoriteService.getFavorites().subscribe((data: FavoriteType[] | DefaultResponseType) => {
+            if ((data as DefaultResponseType).error !== undefined) {
+              const error = (data as DefaultResponseType).message;
+              throw new Error(error);
+            }
+            const products: FavoriteType[] = data as FavoriteType[];
+            const productExists = products.filter(item => item.id === this.product.id);
+            if (productExists && productExists.length > 0) {
+              this.product.isInFavorite = true;
+            }
+          });
+        }
       });
     });
     this.productService.getBestProducts().subscribe((data: ProductType[]) => {
@@ -73,21 +99,31 @@ export class DetailComponent implements OnInit {
   updateCount(value: number): void {
     this.count = value;
     if (this.product.countInCart) {
-      this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType) => {
-        this.product.countInCart = this.count;
-      });
+      this.addToCart();
     }
   }
 
+  updateFavorite(product: ProductType) {
+    this.product.isInFavorite = this.repeatedCodeService.updateFavorite(product);
+  }
+
   public addToCart(): void {
-    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType) => {
+    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
+      if ((data as DefaultResponseType).error !== undefined) {
+        const error = (data as DefaultResponseType).message;
+        throw new Error(error);
+      }
       this.product.countInCart = this.count;
     });
-    // this.router.navigate(['/cart']);
   }
 
   public removeFromCart() {
-    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType) => {
+    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
+      if ((data as DefaultResponseType).error !== undefined) {
+        const error = (data as DefaultResponseType).message;
+        throw new Error(error);
+      }
+
       this.product.countInCart = 0;
       this.count = 1;
     });

@@ -5,6 +5,7 @@ import {AuthService} from "./auth.service";
 import {DefaultResponseType} from "../../../types/default-response.type";
 import {LoginResponseType} from "../../../types/login-response.type";
 import {Router} from "@angular/router";
+import {TokenType} from "../../../types/token.type";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -12,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const tokens = this.authService.getTokens();
+    const tokens: TokenType = this.authService.getTokens();
     if (tokens && tokens.accessToken) {
       const authReq = req.clone({
         headers: req.headers.set('x-access-token', tokens.accessToken)
@@ -29,14 +30,14 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req);
   }
 
-  handle401Error(req: HttpRequest<any>, next: HttpHandler) {
+  handle401Error(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.authService.refresh().pipe(
       switchMap((result: DefaultResponseType | LoginResponseType) => {
-        let error = '';
+        let error: string = '';
         if (result as DefaultResponseType !== undefined) {
           error = (result as DefaultResponseType).message;
         }
-        const refreshResult = result as LoginResponseType;
+        const refreshResult: LoginResponseType = result as LoginResponseType;
         if (!refreshResult.accessToken || !refreshResult.refreshToken || !refreshResult.userId) {
           error = 'Authorization error';
         }

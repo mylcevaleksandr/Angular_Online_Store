@@ -4,6 +4,10 @@ import {environment} from "../../../../environments/environment";
 import {CartService} from "../../services/cart.service";
 import {CartType} from "../../../../types/cart.type";
 import {Router} from "@angular/router";
+import {AuthService} from "../../../core/auth/auth.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {RepeatedCodeService} from "../../services/repeatedCode.service";
+import {DefaultResponseType} from "../../../../types/default-response.type";
 
 @Component({
   selector: 'product-card',
@@ -17,12 +21,17 @@ export class ProductCardComponent implements OnInit {
   public serverStaticPath = environment.serverStaticPath;
   public count: number = 1;
 
-  constructor(private cartService: CartService, private router: Router) {
+  constructor(private cartService: CartService,
+              private router: Router,
+              private authService: AuthService,
+              private _snackBar: MatSnackBar,
+              private repeatedCodeService: RepeatedCodeService) {
   }
 
   ngOnInit(): void {
     if (this.countInCart && this.countInCart > 1) {
       this.count = this.countInCart;
+
     }
   }
 
@@ -32,23 +41,27 @@ export class ProductCardComponent implements OnInit {
     }
   }
 
-  public updateCount(value: number) {
+  public updateFavorite():void {
+    this.product.isInFavorite = this.repeatedCodeService.updateFavorite(this.product);
+  }
+
+  public updateCount(value: number):void {
     this.count = value;
     if (this.countInCart) {
-      this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType) => {
+      this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
         this.countInCart = this.count;
       });
     }
   }
 
   public addToCart(): void {
-    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType) => {
+    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
       this.countInCart = this.count;
     });
   }
 
   public removeFromCart(): void {
-    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType) => {
+    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
       this.countInCart = 0;
       this.count = 1;
     });

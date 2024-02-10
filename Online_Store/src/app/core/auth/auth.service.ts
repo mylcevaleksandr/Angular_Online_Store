@@ -4,6 +4,7 @@ import {DefaultResponseType} from "../../../types/default-response.type";
 import {LoginResponseType} from "../../../types/login-response.type";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import {TokenType} from "../../../types/token.type";
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class AuthService {
   }
 
   logout(): Observable<DefaultResponseType> {
-    const tokens = this.getTokens();
+    const tokens: TokenType = this.getTokens();
     if (tokens && tokens.refreshToken) {
       return this.http.post<DefaultResponseType>(environment.apiUrl + 'logout', {
         refreshToken: tokens.refreshToken
@@ -47,7 +48,7 @@ export class AuthService {
   }
 
   refresh(): Observable<DefaultResponseType | LoginResponseType> {
-    const tokens = this.getTokens();
+    const tokens: TokenType = this.getTokens();
     if (tokens && tokens.refreshToken) {
       return this.http.post<DefaultResponseType | LoginResponseType>(environment.apiUrl + 'refresh', {
         refresToken: tokens.refreshToken
@@ -74,7 +75,7 @@ export class AuthService {
     this.isLogged$.next(false);
   }
 
-  public getTokens(): { accessToken: string | null, refreshToken: string | null } {
+  public getTokens(): TokenType {
     return {
       accessToken: localStorage.getItem(this.accessTokenKey),
       refreshToken: localStorage.getItem(this.refreshTokenKey)

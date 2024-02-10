@@ -17,31 +17,33 @@ export class LoginComponent implements OnInit {
     email: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.required]],
     rememberMe: [false]
-  })
+  });
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private subscriberService: RepeatedCodeService, private _snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder,
+              private authService: AuthService,
+              private repeatedCodeService: RepeatedCodeService,
+              private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
   }
 
   login(): void {
-    this._snackBar.open('ok!')
+    this._snackBar.open('ok!');
     if (this.loginForm.valid && this.loginForm.value.email && this.loginForm.value.password) {
-      this.authService.login(this.loginForm.value.email, this.loginForm.value.password, !!this.loginForm.value.rememberMe)
-        .subscribe({
-          next: (data: DefaultResponseType | LoginResponseType) => {
-            this.subscriberService.performOperation(data, 'login')
-          },
-          error: (errorResponse: HttpErrorResponse) => {
-            if (errorResponse.error && errorResponse.error.message) {
-              this._snackBar.open(errorResponse.error.message)
-            } else {
-              this._snackBar.open('Ошибка Авторизации')
-            }
+      this.authService.login(this.loginForm.value.email, this.loginForm.value.password, !!this.loginForm.value.rememberMe).subscribe({
+        next: (data: DefaultResponseType | LoginResponseType) => {
+          this.repeatedCodeService.performOperation(data, 'login');
+          this.repeatedCodeService.getCart();
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.message) {
+            this._snackBar.open(errorResponse.error.message);
+          } else {
+            this._snackBar.open('Ошибка Авторизации');
           }
-        })
+        }
+      });
     }
   }
-
 }

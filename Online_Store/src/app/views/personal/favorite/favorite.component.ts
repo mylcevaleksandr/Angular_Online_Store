@@ -18,15 +18,20 @@ export class FavoriteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.favoriteService.getProducts().subscribe((data: FavoriteType[] | DefaultResponseType) => {
+    this.favoriteService.getFavorites().subscribe((data: FavoriteType[] | DefaultResponseType) => {
       if ((data as DefaultResponseType).error !== undefined) {
         const error: string = (data as DefaultResponseType).message;
-        console.log(error);
       }
       this.products = data as FavoriteType[];
     });
   }
-public removeFromFavorites(productId:string){
 
-}
+  public removeFromFavorites(productId: string) {
+    this.favoriteService.removeFavorite(productId).subscribe((data: DefaultResponseType) => {
+      if (data.error) {
+        throw new Error(data.message);
+      }
+      this.products = this.products.filter((item: FavoriteType): boolean => item.id !== productId);
+    });
+  }
 }
