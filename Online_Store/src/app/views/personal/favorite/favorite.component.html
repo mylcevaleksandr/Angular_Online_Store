@@ -1,1 +1,32 @@
-<p>favorite works!</p>
+<section class="favorite">
+  <div class="container">
+    <div class="favorite-title">
+      Избранное
+    </div>
+    <div class="favorite-products">
+      <div class="favorite-product" *ngFor="let product of products">
+        <div class="favorite-product-image" style="background-image: url({{serverStaticPath+product.image}})"></div>
+        <div class="favorite-product-name">{{product.name}}</div>
+        <div class="favorite-product-price">{{product.price}} BYN</div>
+        <div class="favorite-product-action">
+          <button class="button" routerLink="/product/{{product.url}}">Открыть</button>
+        </div>
+        <div class="favorite-product-remove" (click)="removeFromFavorites(product.id)">
+          <svg width="14.306152" height="14.579102" viewBox="0 0 14.3062 14.5791" fill="none"
+               xmlns="http://www.w3.org/2000/svg">
+            <desc>
+              Created with Pixso.
+            </desc>
+            <defs/>
+            <rect id="Х" width="14.000000" height="14.000000" transform="translate(0.306152 0.579102)" fill="#FFFFFF"
+                  fill-opacity="0"/>
+            <path id="Line 4" d="M0.534668 1.229L13.2627 13.957" stroke="#A8ABA7" stroke-opacity="1.000000"
+                  stroke-width="1.000000" stroke-linecap="round"/>
+            <path id="Line 5" d="M13.23 0.501953L0.501953 13.23" stroke="#A8ABA7" stroke-opacity="1.000000"
+                  stroke-width="1.000000" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

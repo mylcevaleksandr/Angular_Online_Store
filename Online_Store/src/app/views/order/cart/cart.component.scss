@@ -8,6 +8,7 @@
   .container {
     .cart-title {
       @include head-lora-36;
+      color: #000000;
     }
 
     .cart-empty {

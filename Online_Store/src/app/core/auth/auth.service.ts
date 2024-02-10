@@ -9,15 +9,15 @@ import {environment} from "../../../environments/environment";
   providedIn: 'root'
 })
 export class AuthService {
-  public accessTokenKey: string = 'accessToken'
-  public refreshTokenKey: string = 'refreshToken'
-  public userIdKey: string = 'userId'
+  public accessTokenKey: string = 'accessToken';
+  public refreshTokenKey: string = 'refreshToken';
+  public userIdKey: string = 'userId';
 
-  public isLogged$: Subject<boolean> = new Subject<boolean>()
-  private isLogged: boolean = false
+  public isLogged$: Subject<boolean> = new Subject<boolean>();
+  private isLogged: boolean = false;
 
   constructor(private http: HttpClient) {
-    this.isLogged = !!localStorage.getItem(this.accessTokenKey)
+    this.isLogged = !!localStorage.getItem(this.accessTokenKey);
   }
 
   login(email: string, password: string, rememberMe: boolean): Observable<DefaultResponseType | LoginResponseType> {
@@ -25,7 +25,7 @@ export class AuthService {
       email,
       password,
       rememberMe
-    })
+    });
   }
 
   signup(email: string, password: string, passwordRepeat: string): Observable<DefaultResponseType | LoginResponseType> {
@@ -33,7 +33,7 @@ export class AuthService {
       email,
       password,
       passwordRepeat
-    })
+    });
   }
 
   logout(): Observable<DefaultResponseType> {
@@ -41,45 +41,55 @@ export class AuthService {
     if (tokens && tokens.refreshToken) {
       return this.http.post<DefaultResponseType>(environment.apiUrl + 'logout', {
         refreshToken: tokens.refreshToken
-      })
+      });
     }
-    throw throwError(() => 'Can not find token')
+    throw throwError(() => 'Can not find token');
+  }
+
+  refresh(): Observable<DefaultResponseType | LoginResponseType> {
+    const tokens = this.getTokens();
+    if (tokens && tokens.refreshToken) {
+      return this.http.post<DefaultResponseType | LoginResponseType>(environment.apiUrl + 'refresh', {
+        refresToken: tokens.refreshToken
+      });
+    }
+    throw throwError(() => 'Can not use token');
   }
 
   public getIsLoggedIn(): boolean {
-    return this.isLogged
+    return this.isLogged;
   }
 
   public setTokens(accessToken: string, refreshToken: string): void {
-    localStorage.setItem(this.accessTokenKey, accessToken)
-    localStorage.setItem(this.refreshTokenKey, refreshToken)
-    this.isLogged = true
-    this.isLogged$.next(true)
+    localStorage.setItem(this.accessTokenKey, accessToken);
+    localStorage.setItem(this.refreshTokenKey, refreshToken);
+    this.isLogged = true;
+    this.isLogged$.next(true);
   }
 
   public removeTokens(): void {
-    localStorage.removeItem(this.accessTokenKey)
-    localStorage.removeItem(this.refreshTokenKey)
-    this.isLogged = false
-    this.isLogged$.next(false)
+    localStorage.removeItem(this.accessTokenKey);
+    localStorage.removeItem(this.refreshTokenKey);
+    this.isLogged = false;
+    this.isLogged$.next(false);
   }
 
   public getTokens(): { accessToken: string | null, refreshToken: string | null } {
     return {
       accessToken: localStorage.getItem(this.accessTokenKey),
       refreshToken: localStorage.getItem(this.refreshTokenKey)
-    }
+    };
   }
 
   get userId(): string | null {
-    return localStorage.getItem(this.userIdKey)
+    return localStorage.getItem(this.userIdKey);
   }
 
   set userId(id: string | null) {
     if (id) {
-      localStorage.setItem(this.userIdKey, id)
+      localStorage.setItem(this.userIdKey, id);
     } else {
-      localStorage.removeItem(this.userIdKey)
+      localStorage.removeItem(this.userIdKey);
     }
   }
 }
