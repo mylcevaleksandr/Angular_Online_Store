@@ -92,11 +92,7 @@
           margin-bottom: 12px;
 
           .cart-details-info-title {
-            color: $green-text-color;
-            font-family: 'Lora', 'serif';
-            font-size: 26px;
-            font-weight: 400;
-            font-style: normal;
+            @include head-lora-26;
             margin-bottom: 20px;
           }
 

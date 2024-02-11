@@ -6,6 +6,7 @@ import {CartService} from "../../../shared/services/cart.service";
 import {CartType} from "../../../../types/cart.type";
 import {environment} from "../../../../environments/environment";
 import {DefaultResponseType} from "../../../../types/default-response.type";
+import {CalculateCartTotalUtil} from "../../../shared/utils/calculate-cart-total.util";
 
 @Component({
   selector: 'cart',
@@ -58,20 +59,8 @@ export class CartComponent implements OnInit {
         throw new Error((data as DefaultResponseType).message);
       }
       this.cart = data as CartType;
-      this.calculateTotal();
-
+      CalculateCartTotalUtil.calculateTotal(this);
     });
-  }
-
-  private calculateTotal(): void {
-    this.totalAmount = 0;
-    this.totalCount = 0;
-    if (this.cart) {
-      this.cart.items.forEach(item => {
-        this.totalAmount += item.quantity * item.product.price;
-        this.totalCount += item.quantity;
-      });
-    }
   }
 
   public updateCount(id: string, count: number) {
@@ -81,7 +70,7 @@ export class CartComponent implements OnInit {
           throw new Error((data as DefaultResponseType).message);
         }
         this.cart = data as CartType;
-        this.calculateTotal();
+        CalculateCartTotalUtil.calculateTotal(this);
       });
     }
   }

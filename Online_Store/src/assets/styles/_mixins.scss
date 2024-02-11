@@ -1,4 +1,11 @@
 @import "variables";
+@mixin head-lora-26{
+  color: $green-text-color;
+  font-family: 'Lora', 'serif';
+  font-size: 26px;
+  font-weight: 400;
+  font-style: normal;
+}
 
 @mixin head-lora-32 {
   color: $green-text-color;
