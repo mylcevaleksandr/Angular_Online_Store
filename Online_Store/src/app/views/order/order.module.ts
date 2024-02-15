@@ -6,6 +6,7 @@ import {OrderComponent} from './order/order.component';
 import {SharedModule} from "../../shared/shared.module";
 import {CarouselModule} from "ngx-owl-carousel-o";
 import {ReactiveFormsModule} from "@angular/forms";
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     SharedModule,
     CarouselModule,
     ReactiveFormsModule,
+    MatDialogModule,
     OrderRoutingModule,
   ]
 })

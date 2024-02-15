@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ProductService} from "../../../shared/services/product.service";
 import {CartService} from "../../../shared/services/cart.service";
 import {CartType} from "../../../../types/cart.type";
@@ -10,6 +10,13 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DeliveryType} from "../../../../types/delivery.type";
 import {FormBuilder, Validators} from "@angular/forms";
 import {PaymentType} from "../../../../types/payment.type";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {OrderService} from "../../../shared/services/order.service";
+import {OrderType} from "../../../../types/order.type";
+import {HttpErrorResponse} from "@angular/common/http";
+import {UserService} from "../../../shared/services/user.service";
+import {UserInfoType} from "../../../../types/user-info.type";
+import {AuthService} from "../../../core/auth/auth.service";
 
 @Component({
   selector: 'app-order',
@@ -39,17 +46,22 @@ export class OrderComponent implements OnInit {
       comment: ['']
     }
   );
+  @ViewChild('popup') popup!: TemplateRef<ElementRef>;
+  public dialogRef: MatDialogRef<any> | null = null;
 
   constructor(private productService: ProductService,
               private cartService: CartService,
+              private orderService: OrderService,
               private _snackBar: MatSnackBar,
               private fb: FormBuilder,
+              private dialog: MatDialog,
+              private userService: UserService,
+              private authService: AuthService,
               private router: Router) {
     this.updateDeliveryTypeValidation();
   }
 
   ngOnInit(): void {
-
     this.cartService.getCart().subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error !== undefined) {
         throw new Error((data as DefaultResponseType).message);
@@ -62,6 +74,32 @@ export class OrderComponent implements OnInit {
       }
       CalculateCartTotalUtil.calculateTotal(this);
     });
+    if (this.authService.getIsLoggedIn()) {
+      this.userService.getUserInfo().subscribe((data: UserInfoType | DefaultResponseType) => {
+        if ((data as DefaultResponseType).error !== undefined) {
+          throw new Error((data as DefaultResponseType).message);
+        }
+        const userInfo: UserInfoType = data as UserInfoType;
+
+        const paramsToUpdate = {
+          firstName: userInfo.firstName ? userInfo.firstName : '',
+          lastName: userInfo.lastName ? userInfo.lastName : '',
+          fatherName: userInfo.fatherName ? userInfo.fatherName : '',
+          phone: userInfo.phone ? userInfo.phone : '',
+          paymentType: userInfo.paymentType ? userInfo.paymentType : PaymentType.cardOnline,
+          email: userInfo.email ? userInfo.email : '',
+          street: userInfo.street ? userInfo.street : '',
+          house: userInfo.house ? userInfo.house : '',
+          entrance: userInfo.entrance ? userInfo.entrance : '',
+          apartment: userInfo.apartment ? userInfo.apartment : '',
+          comment: ''
+        };
+        if (userInfo.deliveryType) {
+          this.deliveryType = userInfo.deliveryType;
+        }
+        this.orderForm.setValue(paramsToUpdate);
+      });
+    }
   }
 
   public changeDeliveryType(deliveryType: DeliveryType): void {
@@ -86,7 +124,60 @@ export class OrderComponent implements OnInit {
   }
 
   public createOrder(): void {
-    console.log(this.orderForm.value);
-    console.log(this.orderForm.valid);
+    if (this.orderForm.valid && this.orderForm.value.firstName && this.orderForm.value.lastName && this.orderForm.value.email && this.orderForm.value.phone && this.orderForm.value.paymentType) {
+      const paramsObject: OrderType = {
+        deliveryType: this.deliveryType,
+        firstName: this.orderForm.value.firstName,
+        lastName: this.orderForm.value.lastName,
+        email: this.orderForm.value.email,
+        phone: this.orderForm.value.phone,
+        paymentType: this.orderForm.value.paymentType,
+      };
+      if (this.deliveryType === DeliveryType.delivery) {
+        if (this.orderForm.value.street) {
+          paramsObject.street = this.orderForm.value.street;
+        }
+        if (this.orderForm.value.house) {
+          paramsObject.house = this.orderForm.value.house;
+        }
+        if (this.orderForm.value.apartment) {
+          paramsObject.apartment = this.orderForm.value.apartment;
+        }
+        if (this.orderForm.value.entrance) {
+          paramsObject.entrance = this.orderForm.value.entrance;
+        }
+      }
+      if (this.orderForm.value.comment) {
+        paramsObject.comment = this.orderForm.value.comment;
+      }
+      this.orderService.createOrder(paramsObject).subscribe({
+        next: (data: OrderType | DefaultResponseType) => {
+          if ((data as DefaultResponseType).error !== undefined) {
+            throw new Error((data as DefaultResponseType).message);
+          }
+          this.dialogRef = this.dialog.open(this.popup);
+          this.dialogRef.backdropClick().subscribe(() => {
+            this.router.navigate(["/"]);
+          });
+          this.cartService.setCount(0);
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          if (errorResponse.error && errorResponse.error.message) {
+            this._snackBar.open(errorResponse.error.message);
+          } else {
+            this._snackBar.open('Ошибка отправки заказа');
+          }
+        }
+      });
+
+    } else {
+      this.orderForm.markAllAsTouched();
+      this._snackBar.open("Заполните все необходимые поля");
+    }
+  }
+
+  public closePopup() {
+    this.dialogRef?.close();
+    this.router.navigate(["/"]);
   }
 }

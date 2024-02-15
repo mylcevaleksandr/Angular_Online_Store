@@ -1,5 +1,6 @@
 @import "../../../../assets/styles/mixins";
 @import "../../../../assets/styles/variables";
+@import "../../../../assets/styles/data-form";
 
 .order {
   padding-top: 86px;
@@ -15,100 +16,6 @@
       display: flex;
       justify-content: space-between;
       //align-items: flex-start;
-
-      .order-form {
-        min-width: 646px;
-
-        .order-form-block {
-          margin-bottom: 30px;
-
-          .order-form-label {
-            margin-bottom: 20px;
-            font-weight: 500;
-            color: $gray-text-color;
-          }
-
-          .order-form-types {
-            max-width: 340px;
-            display: flex;
-            align-items: center;
-            box-sizing: border-box;
-            border: 1px solid #519157;
-            border-radius: 3px;
-            font-size: 18px;
-            text-align: center;
-            color: $gray-text-color;
-
-            .order-form-type-item {
-              padding: 13px 35px;
-              cursor: pointer;
-              background: transparent;
-
-              &.active {
-                background: #519157;
-                color: #FFFFFF;
-              }
-            }
-          }
-
-          .order-form-inputs {
-            display: grid;
-            gap: 8px;
-
-            input[type=text] {
-              height: 53px;
-            }
-
-            &.personal-data-inputs {
-              grid-template-columns:repeat(3, 210px);
-            }
-
-            &.address-inputs {
-              grid-template-columns: repeat(2, 125px)162px;
-              grid-template-rows: 1fr 1fr;
-              grid-template-areas:
-                  "street street street"
-                  "house entrance apartment";
-
-              .street {
-                grid-area: street;
-              }
-
-              .house {
-                grid-area: house;
-              }
-
-              .entrance {
-                grid-area: entrance;
-              }
-
-              .apartment {
-                grid-area: apartment;
-              }
-            }
-          }
-
-          .order-form-radio {
-            .order-form-radio-block {
-              margin-bottom: 12px;
-
-              &:last-child {
-                margin-bottom: 0;
-              }
-
-              label {
-                color: $gray-text-color;
-              }
-
-              input:checked {
-                + label {
-                  font-weight: 500;
-                }
-              }
-            }
-          }
-        }
-      }
 
       .order-details {
         width: 422px;
@@ -155,6 +62,33 @@
         }
       }
     }
+  }
+}
+
+.order-popup {
+  padding: 100px 70px 220px;
+  position: relative;
+  text-align: center;
+  color: $green-text-color;
+  background-image: url("../../../../assets/images/page/popup-image.png");
+  background-position: center bottom;
+  background-repeat: no-repeat;
+
+  .order-popup-close {
+    position: absolute;
+    cursor: pointer;
+    top: 30px;
+    right: 30px;
+  }
+
+  .order-popup-title {
+    @include head-lora-32;
+    margin-bottom: 40px;
+  }
+
+  .order-popup-content div {
+    font-size: 20px;
+    margin-bottom: 5px;
   }
 }
 

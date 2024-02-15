@@ -9,7 +9,7 @@ import {DefaultResponseType} from "../../../types/default-response.type";
   providedIn: 'root'
 })
 export class CartService {
-  public count: number = 0;
+  private count: number = 0;
   count$: Subject<number> = new Subject<number>();
 
   constructor(private http: HttpClient) {
@@ -19,6 +19,11 @@ export class CartService {
     return this.http.get<CartType | DefaultResponseType>(environment.apiUrl + "cart", {withCredentials: true});
   }
 
+  public setCount(count: number) {
+    this.count = count;
+    this.count$.next(this.count);
+  }
+
   public getCartCount(): Observable<{ count: number } | DefaultResponseType> {
     return this.http.get<{
       count: number
@@ -26,8 +31,7 @@ export class CartService {
       .pipe(
         tap(data => {
           if (!data.hasOwnProperty('error')) {
-            this.count = (data as { count: number }).count;
-            this.count$.next(this.count);
+            this.setCount((data as { count: number }).count);
           }
         }));
   }
@@ -39,12 +43,12 @@ export class CartService {
     }, {withCredentials: true})
       .pipe(
         tap(data => {
-          this.count = 0;
+          let count = 0;
           if (!data.hasOwnProperty('error')) {
             (data as CartType).items.forEach(item => {
-              this.count += item.quantity;
+              count += item.quantity;
             });
-            this.count$.next(this.count);
+            this.setCount(count);
           }
         }));
   }

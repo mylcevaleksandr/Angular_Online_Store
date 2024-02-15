@@ -74,7 +74,7 @@ export class RepeatedCodeService {
       if ((data as DefaultResponseType).error !== undefined) {
         throw new Error((data as DefaultResponseType).message);
       }
-      this.cartService.count = (data as { count: number }).count;
+      this.cartService.setCount((data as { count: number }).count);
     });
   }
 }
