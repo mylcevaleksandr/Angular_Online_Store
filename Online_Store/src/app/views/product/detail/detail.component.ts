@@ -62,6 +62,7 @@ export class DetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
+      this.count = 1;
       this.productService.getProduct(params['url']).subscribe((data: ProductType) => {
         this.product = data;
         this.cartService.getCart().subscribe((cartData: CartType | DefaultResponseType) => {
@@ -98,7 +99,7 @@ export class DetailComponent implements OnInit {
 
   updateCount(value: number): void {
     this.count = value;
-    if (this.product.countInCart) {
+    if (this.product && this.product.countInCart) {
       this.addToCart();
     }
   }
