@@ -20,8 +20,10 @@ import {RepeatedCodeService} from "../../../shared/services/repeatedCode.service
 })
 export class DetailComponent implements OnInit {
   public products: ProductType[] = [];
+  private favoriteProducts: FavoriteType[] = [];
   public product!: ProductType;
   public count: number = 1;
+  public isLogged: boolean = false;
   public serverStaticPath = environment.serverStaticPath;
 
   customOptions: OwlOptions = {
@@ -61,6 +63,7 @@ export class DetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLogged = this.authService.getIsLoggedIn();
     this.activatedRoute.params.subscribe(params => {
       this.count = 1;
       this.productService.getProduct(params['url']).subscribe((data: ProductType) => {
@@ -77,25 +80,49 @@ export class DetailComponent implements OnInit {
             }
           }
         });
-        if (this.authService.getIsLoggedIn()) {
-          this.favoriteService.getFavorites().subscribe((data: FavoriteType[] | DefaultResponseType) => {
-            if ((data as DefaultResponseType).error !== undefined) {
-              const error = (data as DefaultResponseType).message;
-              throw new Error(error);
-            }
-            const products: FavoriteType[] = data as FavoriteType[];
-            const productExists = products.filter(item => item.id === this.product.id);
-            if (productExists && productExists.length > 0) {
-              this.product.isInFavorite = true;
+        if (this.isLogged) {
+          this.favoriteService.getFavorites().subscribe({
+            next: (data: FavoriteType[] | DefaultResponseType) => {
+              if ((data as DefaultResponseType).error !== undefined) {
+                const error = (data as DefaultResponseType).message;
+                this.processCatalog();
+                throw new Error(error);
+              }
+              const products: FavoriteType[] = data as FavoriteType[];
+              const productExists = products.filter(item => item.id === this.product.id);
+              if (productExists && productExists.length > 0) {
+                this.product.isInFavorite = true;
+              }
+              this.favoriteProducts = data as FavoriteType[];
+              this.processCatalog();
+            },
+            error: (error) => {
+              console.log(error);
+              this.processCatalog();
             }
           });
+        } else {
+          this.processCatalog();
         }
       });
     });
+  }
+
+  processCatalog() {
     this.productService.getBestProducts().subscribe((data: ProductType[]) => {
       this.products = data;
+      if (this.favoriteProducts && this.favoriteProducts.length > 0) {
+        this.products = this.products.map((product: ProductType) => {
+          const productInFavorite: FavoriteType | undefined = this.favoriteProducts?.find(item => item.id === product.id);
+          if (productInFavorite) {
+            product.isInFavorite = true;
+          }
+          return product;
+        });
+      }
     });
   }
+
 
   updateCount(value: number): void {
     this.count = value;

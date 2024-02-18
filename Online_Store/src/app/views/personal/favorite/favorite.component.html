@@ -13,14 +13,18 @@
         <div class="favorite-product-name">{{product.name}}</div>
         <div class="favorite-product-price">{{product.price}} BYN</div>
         <div class="favorite-product-action">
-          <button class="button" routerLink="/product/{{product.url}}">Открыть</button>
+          <button class="button" *ngIf="!product.isInCart"
+                  (click)="addToCart(product.id,1)">В корзину
+          </button>
+          <count-selector [count]="product.amount!" (onCountChange)="updateCount(product.id,$event)"
+                          *ngIf="product.isInCart"></count-selector>
+          <button class="button" *ngIf="product.isInCart"
+                  (click)="removeFromCart(product.id)">В корзине
+          </button>
         </div>
         <div class="favorite-product-remove" (click)="removeFromFavorites(product.id)">
           <svg width="14.306152" height="14.579102" viewBox="0 0 14.3062 14.5791" fill="none"
                xmlns="http://www.w3.org/2000/svg">
-            <desc>
-              Created with Pixso.
-            </desc>
             <defs/>
             <rect id="Х" width="14.000000" height="14.000000" transform="translate(0.306152 0.579102)" fill="#FFFFFF"
                   fill-opacity="0"/>

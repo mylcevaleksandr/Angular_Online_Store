@@ -97,7 +97,7 @@
           <div class="detail-info-params-price">{{product.price}} BYN</div>
         </div>
         <div class="detail-info-actions">
-          <button class="button button-transparent button-icon" (click)="updateFavorite(product)">
+          <button class="button button-transparent button-icon" (click)="updateFavorite(product)" *ngIf="isLogged">
             <svg width="16.000000" height="14.362793" viewBox="0 0 16 14.3628" fill="none"
                  xmlns="http://www.w3.org/2000/svg"
                  *ngIf="product.isInFavorite">

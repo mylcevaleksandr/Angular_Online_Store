@@ -68,7 +68,6 @@ export class CatalogComponent implements OnInit {
           },
           error: (error) => {
             console.log(error.error);
-
             this.processCatalog();
           }
         });
@@ -144,7 +143,6 @@ export class CatalogComponent implements OnInit {
               return product;
             });
           }
-          // document.getElementById("point")?.scrollIntoView({behavior: "smooth"});
         });
       });
     });

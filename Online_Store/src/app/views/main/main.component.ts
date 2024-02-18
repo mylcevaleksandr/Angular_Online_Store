@@ -2,6 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../shared/services/product.service";
 import {ProductType} from "../../../types/product.type";
 import {OwlOptions} from "ngx-owl-carousel-o";
+import {FavoriteType} from "../../../types/favorite.type";
+import {FavoriteService} from "../../shared/services/favorite.service";
+import {DefaultResponseType} from "../../../types/default-response.type";
+import {AuthService} from "../../core/auth/auth.service";
 
 @Component({
   selector: 'main',
@@ -9,7 +13,9 @@ import {OwlOptions} from "ngx-owl-carousel-o";
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  products: ProductType[] = []
+  products: ProductType[] = [];
+  private favoriteProducts: FavoriteType[] = [];
+
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -34,8 +40,7 @@ export class MainComponent implements OnInit {
       }
     },
     nav: false
-  }
-
+  };
   customOptionsReviews: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -57,7 +62,7 @@ export class MainComponent implements OnInit {
       }
     },
     nav: false
-  }
+  };
 
   reviews = [
     {
@@ -95,15 +100,50 @@ export class MainComponent implements OnInit {
       image: 'review-7.png',
       text: 'Хочу поблагодарить консультанта Ирину за помощь в выборе цветка для моей жены. Я ещё никогда не видел такого трепетного отношения к весьма непростому клиенту, которому сложно угодить! Сервис – огонь7'
     }
-  ]
+  ];
 
-  constructor(private productService: ProductService) {
+  constructor(private productService: ProductService,
+              private favoriteService: FavoriteService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.productService.getBestProducts()
-      .subscribe((data: ProductType[]) => {
-        this.products = data
-      })
+    if (this.authService.getIsLoggedIn()) {
+      this.favoriteService.getFavorites().subscribe({
+        next: (data: FavoriteType[] | DefaultResponseType) => {
+          if ((data as DefaultResponseType).error !== undefined) {
+            const error = (data as DefaultResponseType).message;
+            this.processCatalog();
+            throw new Error(error);
+          }
+          this.favoriteProducts = data as FavoriteType[];
+          this.processCatalog();
+        },
+        error: (error) => {
+          console.log(error);
+          this.processCatalog();
+        }
+      });
+    } else {
+      this.processCatalog();
+    }
+
+  }
+
+  processCatalog() {
+    this.productService.getBestProducts().subscribe((data: ProductType[]) => {
+      this.products = data;
+
+      if (this.favoriteProducts && this.favoriteProducts.length > 0) {
+        this.products = this.products.map((product: ProductType) => {
+          const productInFavorite: FavoriteType | undefined = this.favoriteProducts?.find(item => item.id === product.id);
+          if (productInFavorite) {
+            product.isInFavorite = true;
+          }
+          return product;
+        });
+        console.log(this.products);
+      }
+    });
   }
 }

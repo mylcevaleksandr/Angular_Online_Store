@@ -18,6 +18,7 @@ export class ProductCardComponent implements OnInit {
   @Input() product!: ProductType;
   @Input() isLight: boolean = false;
   @Input() countInCart: number | undefined = 0;
+  public isLogged: boolean = false;
   public serverStaticPath = environment.serverStaticPath;
   public count: number = 1;
 
@@ -29,9 +30,9 @@ export class ProductCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLogged = this.authService.getIsLoggedIn();
     if (this.countInCart && this.countInCart > 1) {
       this.count = this.countInCart;
-
     }
   }
 
@@ -41,11 +42,11 @@ export class ProductCardComponent implements OnInit {
     }
   }
 
-  public updateFavorite():void {
+  public updateFavorite(): void {
     this.product.isInFavorite = this.repeatedCodeService.updateFavorite(this.product);
   }
 
-  public updateCount(value: number):void {
+  public updateCount(value: number): void {
     this.count = value;
     if (this.countInCart) {
       this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
