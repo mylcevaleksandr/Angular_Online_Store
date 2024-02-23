@@ -142,7 +142,6 @@ export class MainComponent implements OnInit {
           }
           return product;
         });
-        console.log(this.products);
       }
     });
   }

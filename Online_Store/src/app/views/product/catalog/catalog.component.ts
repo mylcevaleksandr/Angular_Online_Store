@@ -46,6 +46,20 @@ export class CatalogComponent implements OnInit {
               private favoriteService: FavoriteService,
               private authService: AuthService,
               private router: Router) {
+
+    // if (this.activeParams.page === undefined) {
+    //   this.activeParams.page = 1;
+    //   this.navigate()
+    // }
+  }
+
+  public openNextPage(): void {
+    console.log(this.activeParams.page);
+    if (this.activeParams.page && this.activeParams.page < this.pages.length) {
+      this.activeParams.page++;
+      this.navigate();
+    }
+
   }
 
   ngOnInit(): void {
@@ -119,6 +133,7 @@ export class CatalogComponent implements OnInit {
           });
         }
         this.productService.getProducts(this.activeParams).subscribe(data => {
+
           this.pages = [];
           for (let i = 1; i <= data.pages; i++) {
             this.pages.push(i);
@@ -154,7 +169,8 @@ export class CatalogComponent implements OnInit {
     } else {
       this.activeParams.types = this.activeParams.types.filter(item => item !== appliedFilter.urlParam);
     }
-    this.activeParams.page = 1;
+    // this.activeParams.page = 1;
+    console.log(this.activeParams.page);
     this.navigate();
   }
 
@@ -175,13 +191,6 @@ export class CatalogComponent implements OnInit {
   public openPrevPage(): void {
     if (this.activeParams.page && this.activeParams.page > 1) {
       this.activeParams.page--;
-      this.navigate();
-    }
-  }
-
-  public openNextPage(): void {
-    if (this.activeParams.page && this.activeParams.page < this.pages.length) {
-      this.activeParams.page++;
       this.navigate();
     }
   }
