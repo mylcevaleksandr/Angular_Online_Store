@@ -5,7 +5,6 @@ import {CartService} from "../../services/cart.service";
 import {CartType} from "../../../../types/cart.type";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../core/auth/auth.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {RepeatedCodeService} from "../../services/repeatedCode.service";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 
@@ -23,10 +22,10 @@ export class ProductCardComponent implements OnInit {
   public count: number = 1;
 
   constructor(private cartService: CartService,
-              private router: Router,
               private authService: AuthService,
-              private _snackBar: MatSnackBar,
-              private repeatedCodeService: RepeatedCodeService) {
+              private repeatedCodeService: RepeatedCodeService,
+              private router: Router,
+  ) {
   }
 
   ngOnInit(): void {
